@@ -1,3 +1,5 @@
-src/database/data/*
+*/data/*
 dist/*
 names_oracle.egg*
+build/*
+tmp.py
