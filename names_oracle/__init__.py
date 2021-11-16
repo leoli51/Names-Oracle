@@ -130,8 +130,8 @@ def split_name_in_first_and_last(name, country):
         first_name_guess = " ".join(name_parts[:i])
         last_name_guess = " ".join(name_parts[i:])
 
-        first_name_data = names_oracle.get_name_info(first_name_guess, country)
-        last_name_data = names_oracle.get_name_info(last_name_guess, country)
+        first_name_data = get_name_info(first_name_guess, country)
+        last_name_data = get_name_info(last_name_guess, country)
 
         if not (first_name_data or last_name_data):
             continue

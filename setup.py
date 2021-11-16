@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='names-oracle',
-    version='0.2',
+    version='0.3',
     description='Provides information and statistics about names and last names.',
     license='MIT',
     author="Leonardo La Rocca",
