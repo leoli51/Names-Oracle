@@ -121,6 +121,40 @@ def get_name_info(name, country):
 
     return info
 
+
+def split_name_in_first_and_last(name, country):
+    name_parts = name.title().strip().split()
+    best_score = 0
+    best_names = []    
+    for i in range(len(name_parts) + 1): # +1 to include the case in which it is only a name
+        first_name_guess = " ".join(name_parts[:i])
+        last_name_guess = " ".join(name_parts[i:])
+
+        first_name_data = names_oracle.get_name_info(first_name_guess, country)
+        last_name_data = names_oracle.get_name_info(last_name_guess, country)
+
+        if not (first_name_data or last_name_data):
+            continue
+
+        fn_fn_score = first_name_data[FIRST_NAME_PROBABILITY_TAG] if first_name_data else 0
+        fn_ln_score = first_name_data[LAST_NAME_PROBABILITY_TAG] if first_name_data else 0
+
+        ln_fn_score = last_name_data[FIRST_NAME_PROBABILITY_TAG] if last_name_data else 0
+        ln_ln_score = last_name_data[LAST_NAME_PROBABILITY_TAG] if last_name_data else 0
+
+        if fn_fn_score + ln_ln_score > ln_fn_score + fn_ln_score:
+            score = fn_fn_score + ln_ln_score
+            if score > best_score:
+                best_score = score
+                best_names = [first_name_guess, last_name_guess]
+        else:
+            score = ln_fn_score + fn_ln_score
+            if score > best_score:
+                best_score = score
+                best_names = [last_name_guess, first_name_guess]
+    
+    return best_names
+
 if __name__ == '__main__':
     from pprint import pprint
     pprint(get_available_countries())
