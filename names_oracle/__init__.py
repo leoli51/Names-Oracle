@@ -3,6 +3,25 @@ from os import path
 import importlib.resources
 
 data_handle = importlib.resources.files(__package__).joinpath("data")
+with data_handle as p:
+    data_path = p
+
+def download_dataset():
+    import zipfile
+    from urllib.request import urlretrieve
+
+    data_url = "https://github.com/leoli51/Names-Oracle/releases/download/0.1/data.zip"
+    data_zip_path = path.join(path.dirname(data_path), "data.zip")
+    urlretrieve(data_url, data_zip_path)
+
+    with zipfile.ZipFile(data_zip_path, 'r') as zip_ref:
+        zip_ref.extractall(path.dirname(data_path))
+
+# see if path exists: if it doesn't download the dataset
+if not data_path.exists():
+    print("Downloading dataset ~600MB it may take some time. The dataset is only downloaded once!")
+    download_dataset()
+    print("Dataset downloaded!")
 
 # common tags
 NAME_TAG = 'name'
@@ -44,41 +63,35 @@ def load(country):
     names[country] = dict()
     max_occurrences[country] = {'name' : 0, 'last_name' : 0}
     max_name_occ = 0
-    with data_handle as data_path:
-        with open(path.join(data_path, country, 'names.csv'), 'r', encoding='utf-8') as namesfile:
-            for i, line in enumerate(namesfile.readlines()):
-                if i == 0:
-                    continue
-                line = line.strip().split(',')
-                name = line[0]
-                sex = line[1]
-                count = int(line[2])
-                if name not in names[country]:
-                    names[country][name] = {'M' : 0, 'F' : 0}
-                
-                names[country][name][sex] = count
-                max_name_occ = max(max_name_occ, sum(names[country][name].values()))
+    with open(path.join(data_path, country, 'names.csv'), 'r', encoding='utf-8') as namesfile:
+        for i, line in enumerate(namesfile.readlines()):
+            if i == 0:
+                continue
+            line = line.strip().split(',')
+            name = line[0]
+            sex = line[1]
+            count = int(line[2])
+            if name not in names[country]:
+                names[country][name] = {'M' : 0, 'F' : 0}
+            
+            names[country][name][sex] = count
+            max_name_occ = max(max_name_occ, sum(names[country][name].values()))
     
     max_occurrences[country]['name'] = max_name_occ
     
     last_names[country] = dict()
     max_last_name_occ = 0
-    with data_handle as data_path:
-        with open(path.join(data_path, country, 'last_names.csv'), 'r', encoding='utf-8') as lastnamesfile:
-            for i, line in enumerate(lastnamesfile.readlines()):
-                if i == 0:
-                    continue
-                line = line.strip().split(',')
-                lastname = line[0]
-                count = int(line[1])
-                last_names[country][lastname] = count
-                max_last_name_occ = max(max_last_name_occ, count)
+    with open(path.join(data_path, country, 'last_names.csv'), 'r', encoding='utf-8') as lastnamesfile:
+        for i, line in enumerate(lastnamesfile.readlines()):
+            if i == 0:
+                continue
+            line = line.strip().split(',')
+            lastname = line[0]
+            count = int(line[1])
+            last_names[country][lastname] = count
+            max_last_name_occ = max(max_last_name_occ, count)
     
     max_occurrences[country]['last_name'] = max_last_name_occ
-
-def load_all():
-    for country in available_countries:
-        load(country)
 
 # query name data:  
 def get_name_info(name, country):
