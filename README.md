@@ -24,6 +24,8 @@ Import:
 >>> import names_oracle
 ```
 
+**Note**: the first import downloads the dataset (asset from this repository), it is around ~600MB so it may take a while.
+
 The module is composed of just a couple of functions. The most important being:
 
 `get_name_info(name : str, country : str) -> Union[Dict[str: float], None]`
@@ -40,9 +42,9 @@ The available countries are:
 
 If you want to retrieve the data for all countries merged you can use `"ALL"` as country code.
 
-**Note: The first time you retrieve information for a country its database is loaded in memory, this is why the first call is always slow.**
+**Note**: The first time you retrieve information for a country its database is loaded in memory, this is why the first call is always slow.
 
-**Note: The ALL database is the biggest one (~1Gb) as it contains all other databases merged together, therefore it takes some time to load.**
+**Note**: The ALL database is the biggest one (~1Gb) as it contains all other databases merged together, therefore it takes some time to load.
 
 ```bash
 >>> from pprint import pprint
