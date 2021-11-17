@@ -23,7 +23,7 @@ python -m names_oracle download_dataset
 **Note**: the dataset (asset from this repository), is around ~600MB so it may take a while.
 
 3) test:
- 
+
 ```bash
 python -m names_oracle test
 ```
