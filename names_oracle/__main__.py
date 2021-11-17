@@ -1,4 +1,4 @@
-from . import get_name_info, get_available_countries
+from . import get_name_info, get_available_countries, split_name_in_first_and_last
 import importlib.resources
 
 data_handle = importlib.resources.files(__package__).joinpath("data")
@@ -11,7 +11,7 @@ def remove_dataset():
     if data_path.exists():
         print("Removing dataset...")
         try:
-            shutil.rmtree(mydir)
+            shutil.rmtree(data_path)
         except OSError as e:
             print ("Error: %s - %s." % (e.filename, e.strerror))
         print("Done.")
@@ -57,7 +57,7 @@ def test():
     pprint(get_name_info('Mawlkenv lka', 'IT'))
 
     print("Splitting La Rocca Maria Felicita in first (Maria Felicita) and last (La Rocca) name:")
-    print(split_name_in_first_and_last("La Rocca Maria Felicita"))
+    print(split_name_in_first_and_last("La Rocca Maria Felicita", "IT"))
 
 
 if __name__ == '__main__':

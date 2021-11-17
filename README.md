@@ -8,13 +8,25 @@ This project was inspired and based on the [names-dataset](https://github.com/ph
 
 ## Install
 
-To install:
+1) install the package:
 
 ```bash
 pip install names-oracle
 ```
 
-Note: the package contains the database of names, so it is quite heavy ~2Gb.
+2) download the dataset:
+
+```bash
+python -m names_oracle download_dataset
+```
+
+**Note**: the dataset (asset from this repository), is around ~600MB so it may take a while.
+
+3) test:
+ 
+```bash
+python -m names_oracle test
+```
 
 ## How to use
 
@@ -23,8 +35,6 @@ Import:
 ```bash
 >>> import names_oracle
 ```
-
-**Note**: the first import downloads the dataset (asset from this repository), it is around ~600MB so it may take a while.
 
 The module is composed of just a couple of functions. The most important being:
 
