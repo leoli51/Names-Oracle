@@ -6,23 +6,6 @@ data_handle = importlib.resources.files(__package__).joinpath("data")
 with data_handle as p:
     data_path = p
 
-def download_dataset():
-    import zipfile
-    from urllib.request import urlretrieve
-
-    data_url = "https://github.com/leoli51/Names-Oracle/releases/download/0.1/data.zip"
-    data_zip_path = path.join(path.dirname(data_path), "data.zip")
-    urlretrieve(data_url, data_zip_path)
-
-    with zipfile.ZipFile(data_zip_path, 'r') as zip_ref:
-        zip_ref.extractall(path.dirname(data_path))
-
-# see if path exists: if it doesn't download the dataset
-if not data_path.exists():
-    print("Downloading dataset ~600MB it may take some time. The dataset is only downloaded once!")
-    download_dataset()
-    print("Dataset downloaded!")
-
 # common tags
 NAME_TAG = 'name'
 
@@ -51,13 +34,11 @@ def get_available_countries():
     with data_handle as data_path:
         return os.listdir(data_path)
 
-available_countries = get_available_countries()
-
 def load(country):
     global names
     global last_names
 
-    if country not in available_countries:
+    if country not in get_available_countries():
         raise ValueError(f'Country: {country} is not supported or is not a valid country. Hint: use list_available_countries()')
     
     names[country] = dict()
@@ -167,11 +148,3 @@ def split_name_in_first_and_last(name, country):
                 best_names = [last_name_guess, first_name_guess]
     
     return best_names
-
-if __name__ == '__main__':
-    from pprint import pprint
-    pprint(get_available_countries())
-    pprint(get_name_info('Leonardo', 'IT'))
-    pprint(get_name_info('Maria Felicita', 'IT'))
-    pprint(get_name_info('Banana', 'IT'))
-    pprint(get_name_info('Mawlkenv lka', 'IT'))
